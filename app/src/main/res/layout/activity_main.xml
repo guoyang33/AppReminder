@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:text="進入頁面" />
             <Button
-                android:id="@+id/data_update_button"
+                android:id="@+id/data_upload_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="手動上傳資料" />

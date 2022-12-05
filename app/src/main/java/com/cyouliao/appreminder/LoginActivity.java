@@ -17,10 +17,22 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.NameValuePair;
+import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
+import cz.msebera.android.httpclient.client.methods.CloseableHttpResponse;
+import cz.msebera.android.httpclient.client.methods.HttpPost;
+import cz.msebera.android.httpclient.impl.client.CloseableHttpClient;
+import cz.msebera.android.httpclient.impl.client.HttpClients;
+import cz.msebera.android.httpclient.message.BasicNameValuePair;
+import cz.msebera.android.httpclient.util.EntityUtils;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -50,70 +62,86 @@ public class LoginActivity extends AppCompatActivity {
                 if (exp_id.equals("")) {
                     Toast.makeText(getBaseContext(), "請輸入參與者編號", Toast.LENGTH_SHORT).show();
                 } else {
-                    try {
-                        RequestParams requestParams = new RequestParams();
-                        requestParams.put("exp_id", exp_id);
-                        requestParams.put("password", password);
-                        AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
-                        asyncHttpClient.post("http://120.108.111.131/App_3rd/user_login.php", requestParams, new JsonHttpResponseHandler() {
-                            @Override
-                            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                                super.onSuccess(statusCode, headers, response);
-                                JSONObject responseHeaders = null;
-                                JSONObject responseContents = null;
-                                try {
-                                    responseHeaders = response.getJSONObject("headers");
-                                    String status = responseHeaders.getString("status");
-                                    String error_msg = responseHeaders.getString("error_msg");
-                                    if (status.equals("OK")) {
-                                        responseContents = response.getJSONObject("contents");
-                                        JSONObject user_remote = responseContents.getJSONObject("user");
-
-                                        user.setU_id(user_remote.getInt("id"));
-                                        user.setExp_id(user_remote.getString("exp_id"));
-                                        user.setAddiction(user_remote.getInt("addiction"));
-                                        user.setExp_type(user_remote.getString("exp_type"));
-                                        user.setPassword((user_remote.getString("password")));
-                                        user.update();
-
-                                        Toast.makeText(LoginActivity.this, "登入成功", Toast.LENGTH_SHORT).show();
-
-                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                        startActivity(intent);
-                                        finish();
-                                    } else {        // 登入失敗
-                                        // 顯示對話框
-                                        AlertDialog alertDialog = new AlertDialog.Builder(LoginActivity.this).create();
-                                        alertDialog.setTitle(status);
-                                        alertDialog.setMessage(error_msg + "\n請聯絡研究人員");
-                                        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "關閉", new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                dialog.dismiss();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                CloseableHttpClient client = HttpClients.createDefault();
+                                HttpPost httpPost = new HttpPost("http://120.108.111.131/App_3rd/user_login.php");
+                                List<NameValuePair> params = new ArrayList<NameValuePair>();
+                                params.add(new BasicNameValuePair("exp_id", exp_id));
+                                params.add(new BasicNameValuePair("password", password));
+                                httpPost.setEntity(new UrlEncodedFormEntity(params));
+                                CloseableHttpResponse response = client.execute(httpPost);
+                                assert response.getStatusLine().getStatusCode() == 200;
+                                // 轉成JSON Object
+                                JSONObject jsonResponse = new JSONObject(EntityUtils.toString(response.getEntity()));
+                                JSONObject jsonHeaders = jsonResponse.getJSONObject("headers");
+                                String status = jsonHeaders.getString("status");
+                                client.close();
+                                if (!status.equals("OK")) {     // NOT OK
+                                    // 顯示對話框
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            try {
+                                                AlertDialog alertDialog = new AlertDialog.Builder(LoginActivity.this).create();
+                                                alertDialog.setTitle(status);
+                                                alertDialog.setMessage(jsonHeaders.getString("error_msg") + "\n請聯絡研究人員");
+                                                alertDialog.setCanceledOnTouchOutside(false);
+                                                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "關閉", new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        dialog.dismiss();
+                                                    }
+                                                });
+                                                alertDialog.show();
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
                                             }
-                                        });
-                                        alertDialog.show();
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                } finally { }
-                            }
+                                        }
+                                    });
+                                } else {        // OK
+                                    JSONObject jsonContents = jsonResponse.getJSONObject("contents");
+                                    JSONObject userRemote = jsonContents.getJSONObject("user");
 
-                            @Override
-                            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                                super.onFailure(statusCode, headers, throwable, errorResponse);
-                                System.out.println("Request failed: " + statusCode);
-                                Toast.makeText(LoginActivity.this, "連線失敗，請檢查網路是否正常連線", Toast.LENGTH_SHORT).show();
+                                    user.setU_id(userRemote.getInt("id"));
+                                    user.setExp_id(userRemote.getString("exp_id"));
+                                    user.setAddiction(userRemote.getInt("addiction"));
+                                    user.setExp_type(userRemote.getString("exp_type"));
+                                    user.setPassword((userRemote.getString("password")));
+                                    user.update();
+
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(LoginActivity.this, "登入成功", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(intent);
+                                }
+                            } catch (AssertionError e) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(LoginActivity.this, "連線錯誤，請確認網路是否正常連線", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+//                                showToast("連線錯誤，請確認網路是否正常連線", Toast.LENGTH_LONG);
+//                                Toast.makeText(LoginActivity.this, "連線錯誤，請確認網路是否正常連線", Toast.LENGTH_LONG);
+                                e.printStackTrace();
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                        });
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }  finally { }
+                        }
+                    }).start();
                 }
             }
         });
     }
 
-    public void closeWindow() {
-        finish();
-    }
+//    public void showToast(String text, int duration) {
+//        Toast.makeText(this, text, duration).show();
+//    }
 }

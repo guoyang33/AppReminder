@@ -26,14 +26,12 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         // 建立APP需要的資料表
         sqLiteDatabase.execSQL(User.CREATE_TABLE);
-//        sqLiteDatabase.execSQL(AppCategory.CREATE_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         // 刪除原有的資料表
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + User.TABLE_NAME);
-//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + AppCategory.TABLE_NAME);
         // 呼叫onCreate建立新版的資料表
         onCreate(sqLiteDatabase);
     }
