@@ -94,7 +94,6 @@ public class TimerReceiver extends BroadcastReceiver {
 
                         }
                     }
-//                    String responseContent = EntityUtils.toString(httpEntity);
                     client.close();
                 } catch (AssertionError e) {
                     e.printStackTrace();
@@ -105,19 +104,4 @@ public class TimerReceiver extends BroadcastReceiver {
 
     }
 
-//    public void setDataMakeupDateList(List<String> dataMakeupDateList) {
-//        this.dataMakeupDateList = dataMakeupDateList;
-//    }
-//
-//    public void setTodoList(List<String> todoList) {
-//        this.todoList = todoList;
-//    }
-//
-//    public List<String> getDataMakeupDateList() {
-//        return dataMakeupDateList;
-//    }
-//
-//    public List<String> getTodoList() {
-//        return todoList;
-//    }
 }
