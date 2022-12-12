@@ -38,7 +38,7 @@ public class Notify {
                 .setSmallIcon(R.mipmap.ic_launcher_round)
                 .setContentTitle("尚有資料未上傳")
                 .setContentText("點此進行手動作業")
-                .setAutoCancel(false)
+                .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                 .setContentIntent(pendingIntent);
