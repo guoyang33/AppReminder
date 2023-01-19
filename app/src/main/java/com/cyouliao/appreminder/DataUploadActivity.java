@@ -45,7 +45,7 @@ public class DataUploadActivity extends AppCompatActivity {
             public void run() {
                 try {
                     CloseableHttpClient client = HttpClients.createDefault();
-                    HttpPost httpPost = new HttpPost("http://120.108.111.131/App_3rd/user_status.php");
+                    HttpPost httpPost = new HttpPost("http://120.108.111.131/App_3rd_2/user_status.php");
                     List<NameValuePair> params = new ArrayList<NameValuePair>();
                     params.add(new BasicNameValuePair("u_id", "" + user.getU_id()));
                     params.add(new BasicNameValuePair("password", user.getPassword()));
@@ -141,7 +141,7 @@ public class DataUploadActivity extends AppCompatActivity {
                 public void run() {
                     try {
                         CloseableHttpClient client = HttpClients.createDefault();
-                        HttpPost httpPost = new HttpPost("http://120.108.111.131/App_3rd/data_upload.php");
+                        HttpPost httpPost = new HttpPost("http://120.108.111.131/App_3rd_2/data_upload.php");
                         httpPost.setEntity(new UrlEncodedFormEntity(params));
                         CloseableHttpResponse response = client.execute(httpPost);
                         assert response.getStatusLine().getStatusCode() == 200;

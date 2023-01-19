@@ -67,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
                         public void run() {
                             try {
                                 CloseableHttpClient client = HttpClients.createDefault();
-                                HttpPost httpPost = new HttpPost("http://120.108.111.131/App_3rd/user_login.php");
+                                HttpPost httpPost = new HttpPost("http://120.108.111.131/App_3rd_2/user_login.php");
                                 List<NameValuePair> params = new ArrayList<NameValuePair>();
                                 params.add(new BasicNameValuePair("exp_id", exp_id));
                                 params.add(new BasicNameValuePair("password", password));

@@ -51,7 +51,7 @@ public class TimerReceiver extends BroadcastReceiver {
             public void run() {
                 try {
                     CloseableHttpClient client = HttpClients.createDefault();
-                    HttpPost httpPost = new HttpPost("http://120.108.111.131/App_3rd/user_status.php");
+                    HttpPost httpPost = new HttpPost("http://120.108.111.131/App_3rd_2/user_status.php");
                     List<NameValuePair> params = new ArrayList<NameValuePair>();
                     params.add(new BasicNameValuePair("u_id", "" + user.getU_id()));
                     params.add(new BasicNameValuePair("password", user.getPassword()));

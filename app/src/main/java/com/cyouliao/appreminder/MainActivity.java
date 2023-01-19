@@ -3,7 +3,6 @@ package com.cyouliao.appreminder;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.AppOpsManager;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.usage.UsageStats;
@@ -18,37 +17,20 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-import com.loopj.android.http.SyncHttpClient;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.InputStream;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
-import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.HttpEntity;
 import cz.msebera.android.httpclient.NameValuePair;
-import cz.msebera.android.httpclient.client.HttpClient;
 import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
 import cz.msebera.android.httpclient.client.methods.CloseableHttpResponse;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.impl.client.CloseableHttpClient;
-import cz.msebera.android.httpclient.impl.client.HttpClientBuilder;
 import cz.msebera.android.httpclient.impl.client.HttpClients;
 import cz.msebera.android.httpclient.message.BasicNameValuePair;
 import cz.msebera.android.httpclient.util.EntityUtils;
@@ -180,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 try {
                     CloseableHttpClient client = HttpClients.createDefault();
-                    HttpPost httpPost = new HttpPost("http://120.108.111.131/App_3rd/user_status.php");
+                    HttpPost httpPost = new HttpPost("http://120.108.111.131/App_3rd_2/user_status.php");
                     List<NameValuePair> params = new ArrayList<NameValuePair>();
                     params.add(new BasicNameValuePair("u_id", "" + user.getU_id()));
                     params.add(new BasicNameValuePair("password", user.getPassword()));
@@ -269,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
                 public void run() {
                     try {
                         CloseableHttpClient client = HttpClients.createDefault();
-                        HttpPost httpPost = new HttpPost("http://120.108.111.131/App_3rd/data_upload.php");
+                        HttpPost httpPost = new HttpPost("http://120.108.111.131/App_3rd_2/data_upload.php");
                         httpPost.setEntity(new UrlEncodedFormEntity(params));
                         CloseableHttpResponse response = client.execute(httpPost);
                         assert response.getStatusLine().getStatusCode() == 200;

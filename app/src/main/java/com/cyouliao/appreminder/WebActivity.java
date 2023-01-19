@@ -20,8 +20,8 @@ public class WebActivity extends AppCompatActivity {
         user = new User(getBaseContext());
         webView = (WebView) findViewById(R.id.webview_redirect);
         webView.getSettings().setJavaScriptEnabled(true);
-//        String urlRedirect = "http://120.108.111.131/App_3rd/test_user_index.php";
-        String urlRedirect = "http://120.108.111.131/App_3rd/redirect.php?u_id=" + user.getU_id();
+//        String urlRedirect = "http://120.108.111.131/App_3rd_2/test_user_index.php";
+        String urlRedirect = "http://120.108.111.131/App_3rd_2/redirect.php?u_id=" + user.getU_id();
         webView.loadUrl(urlRedirect);
         webView.setWebViewClient(new WebViewClient() { });
     }
