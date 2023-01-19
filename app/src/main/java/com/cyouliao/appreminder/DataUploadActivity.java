@@ -122,6 +122,7 @@ public class DataUploadActivity extends AppCompatActivity {
             List<UsageStats> usageStatsList = appUsage.queryUsageStatsByDate(date);
             for (UsageStats usageStats : usageStatsList) {
                 Long usageTime = null;
+                // 使用時間 api 29以前不能用getTotalTimeVisible()
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     usageTime = (usageStats.getTotalTimeVisible() - usageStats.getTotalTimeVisible() % 1000) / 1000;
                 } else {

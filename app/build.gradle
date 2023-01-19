@@ -23,7 +23,7 @@ android {
             signingConfig getSigningConfig()
             applicationVariants.all { variant ->
                 variant.outputs.each { output ->
-                    output.outputFileName = "健康上網自控APP3RDv4.apk"
+                    output.outputFileName = "健康上網自控APP3RDv5.apk"
 //                    def date = new Date();
 //                    def formattedDate = date.format('yyyyMMddHHmmss')
 //                    output.outputFile = new File(output.outputFile.parent,

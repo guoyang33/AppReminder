@@ -42,7 +42,6 @@ public class TimerReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        System.out.println("timer received!");
         user = new User(context);
         notify = new Notify();
 
@@ -67,7 +66,6 @@ public class TimerReceiver extends BroadcastReceiver {
                         JSONObject contents = jsonResponse.getJSONObject("contents");
                         // 檢查缺少日期
                         JSONArray dataMakeupDateList = contents.getJSONArray("makeup_date");
-                        System.out.println("data makeup date list count: " + dataMakeupDateList.length());
                         if (dataMakeupDateList.length() > 0) {      // 尚有資料未上傳
                             notify.pushDataMakeup(context);
                         }
