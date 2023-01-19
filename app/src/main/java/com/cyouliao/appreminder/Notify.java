@@ -34,6 +34,7 @@ public class Notify {
         } else {
             pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
         }
+        System.out.println("pushing data makeup notify");
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, DATA_MAKEUP_CHANNEL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher_round)
                 .setContentTitle("尚有資料未上傳")

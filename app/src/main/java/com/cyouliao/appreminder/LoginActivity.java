@@ -75,7 +75,8 @@ public class LoginActivity extends AppCompatActivity {
                                 CloseableHttpResponse response = client.execute(httpPost);
                                 assert response.getStatusLine().getStatusCode() == 200;
                                 // 轉成JSON Object
-                                JSONObject jsonResponse = new JSONObject(EntityUtils.toString(response.getEntity()));
+                                String responseBody = EntityUtils.toString(response.getEntity());
+                                JSONObject jsonResponse = new JSONObject(responseBody);
                                 JSONObject jsonHeaders = jsonResponse.getJSONObject("headers");
                                 String status = jsonHeaders.getString("status");
                                 client.close();

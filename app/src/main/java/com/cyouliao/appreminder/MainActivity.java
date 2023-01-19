@@ -161,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
 
     // 計時器
     public void setTimer() {
+//        System.out.println("setting timer");
         Intent intent = new Intent(this, TimerReceiver.class);
         PendingIntent pendingIntent;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -170,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
         }
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         Calendar calendar = Calendar.getInstance();
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 10 * 60 * 1000, pendingIntent);        // 10分鐘
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1 * 60 * 1000, pendingIntent);        // 10分鐘
     }
 
     // 取得user status
